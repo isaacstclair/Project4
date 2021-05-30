@@ -128,21 +128,36 @@ void Interpreter::EvaluateRules() {
 
             //Time to turn this into a string
 
+            std::cout << datalog.Rules.at(i).RuleToString() << "." << std::endl;
+
             for (Tuple t : relation.GetTuples()) {
                 print = database.Unionize(relation.GetName(), t);
                 if (print) {
                     Header updatedHeader = database.FindNewHead(relation.GetName());
-                    Relation updatedRelation = Relation(finalName, updatedHeader);
-                    updatedRelation.AddTuple(t);
-                    finishedRelations.push_back(updatedRelation);
+                    //Relation updatedRelation = Relation(finalName, updatedHeader);
+                    //updatedRelation.AddTuple(t);
+                    //finishedRelations.push_back(updatedRelation);
+
+                    for(int j=0; j<updatedHeader.Size(); j++){
+                        if(j != updatedHeader.Size()-1){
+                            std::cout << "  " << updatedHeader.GetAttribute(j) << "=" << t.GetValue(j) << ", ";
+                        } else{
+                            std::cout << updatedHeader.GetAttribute(j) << "=" << t.GetValue(j) << std::endl;
+                        }
+
+                    }
+
+
                 }
             }
         }
         ruleNum++;
     }while(print);
 
+/*
     for(int i=0; i<int(datalog.Rules.size()); i++){
-        std::cout << datalog.Rules.at(i).RuleToString() << "." << std::endl;
+
+
         for(int j=0; j<int(finishedRelations.size()); j++){
             if(finishedRelations.at(j).GetName() == datalog.Rules.at(i).GetHeadPredicates().GetName()){
                 for(int k=0; k<finishedRelations.at(j).GetHeader().Size(); k++){
@@ -160,7 +175,7 @@ void Interpreter::EvaluateRules() {
                 std::cout << std::endl;
             }
         }
-    }
+    } */
 
     std::cout << std::endl << "Schemes populated after " << ruleNum << " passes through the Rules." << std::endl << std::endl;
 
@@ -168,6 +183,8 @@ void Interpreter::EvaluateRules() {
 
 
 void Interpreter::EvaluateQueries(){
+
+    std::cout << "Query Evaluation" << std::endl;
     for(int i=0; i < int(datalog.QueriesPredicates.size()); i++){
 
         VectorSeenBefore.clear();
