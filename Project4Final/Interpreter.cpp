@@ -111,7 +111,7 @@ void Interpreter::EvaluateRules() {
                     bodyRelations.at(0) = bodyRelations.at(0).Join(bodyRelations.at(counter));
                     counter++;
                 }
-            } while (counter < bodyRelations.size());
+            } while (counter < int(bodyRelations.size()));
 
 
             Relation relation = bodyRelations.at(0);
