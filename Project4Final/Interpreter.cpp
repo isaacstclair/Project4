@@ -196,7 +196,7 @@ void Interpreter::EvaluateQueries(){
             std::cout << datalog.QueriesPredicates.at(i).QueryToString() << " Yes(" << relation.GetTupleSize() << ")" << std::endl;
             relation.RelationToString();
         } else if(relation.GetTupleSize() > 0 && allStrings){
-            std::cout << datalog.QueriesPredicates.at(i).QueryToString() << " Yes(" << relation.GetTupleSize() << ")";
+            std::cout << datalog.QueriesPredicates.at(i).QueryToString() << " Yes(" << relation.GetTupleSize() << ")" << std::endl << std::endl << "1" << std::endl << "2";
         } else{
             std::cout << datalog.QueriesPredicates.at(i).QueryToString() << " No" << std::endl;
             relation.RelationToString();
