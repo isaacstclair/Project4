@@ -74,7 +74,6 @@ void Interpreter::EvaluateRules() {
     std::vector<Relation> finishedRelations;
     std::cout << "Rule Evaluation" << std::endl;
     bool print;
-    bool again = false;
     int sum;
     int ruleNum=0;
     do{
