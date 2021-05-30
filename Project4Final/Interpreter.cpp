@@ -142,7 +142,7 @@ void Interpreter::EvaluateRules() {
     }while(print);
 
     for(int i=0; i<int(datalog.Rules.size()); i++){
-        std::cout << datalog.Rules.at(i).RuleToString() << std::endl;
+        std::cout << datalog.Rules.at(i).RuleToString() << "." << std::endl;
         for(int j=0; j<int(finishedRelations.size()); j++){
             if(finishedRelations.at(j).GetName() == datalog.Rules.at(i).GetHeadPredicates().GetName()){
                 for(int k=0; k<finishedRelations.at(j).GetHeader().Size(); k++){
