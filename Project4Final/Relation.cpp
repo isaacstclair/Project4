@@ -112,7 +112,7 @@ Relation Relation::Join(Relation secondRelation){
 
     Header newHeader = CombineHeaders(secondRelation.GetHeader());
     matchedTuplesPairs = tuplesToMatch(secondRelation.GetHeader());
-    if(int(matchedTuplesPairs.size()) > 0 && (tuples.size() > 0 | secondRelation.tuples.size() > 0)) {
+    if(int(matchedTuplesPairs.size()) > 0 && (!tuples.empty() | secondRelation.tuples.empty())) {
         for (int i = 0; i < int(matchedTuplesPairs.size()); i++) {
             for (Tuple j : tuples) {
                 for(Tuple k : secondRelation.GetTuples()) {
