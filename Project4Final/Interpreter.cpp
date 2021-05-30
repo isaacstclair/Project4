@@ -73,9 +73,12 @@ void Interpreter::EvaluateRules() {
     std::vector<Relation> bodyRelations;
     std::vector<Relation> finishedRelations;
     std::cout << "Rule Evaluation" << std::endl;
-    bool print = false;
+    bool print;
+    bool again = false;
+    int sum;
     int ruleNum=0;
     do{
+        sum = 0;
         for (int i = 0; i < int(datalog.Rules.size()); i++) {
             Predicate head = datalog.Rules.at(i).GetHeadPredicates();
             std::string finalName = datalog.Rules.at(i).GetHeadPredicates().GetName();
@@ -129,15 +132,11 @@ void Interpreter::EvaluateRules() {
             //Time to turn this into a string
 
             std::cout << datalog.Rules.at(i).RuleToString() << "." << std::endl;
-
             for (Tuple t : relation.GetTuples()) {
                 print = database.Unionize(relation.GetName(), t);
                 if (print) {
                     Header updatedHeader = database.FindNewHead(relation.GetName());
-                    //Relation updatedRelation = Relation(finalName, updatedHeader);
-                    //updatedRelation.AddTuple(t);
-                    //finishedRelations.push_back(updatedRelation);
-
+                    sum++;
                     for(int j=0; j<updatedHeader.Size(); j++){
                         if(j != updatedHeader.Size()-1){
                             std::cout << "  " << updatedHeader.GetAttribute(j) << "=" << t.GetValue(j) << ", ";
@@ -152,30 +151,11 @@ void Interpreter::EvaluateRules() {
             }
         }
         ruleNum++;
-    }while(print);
-
-/*
-    for(int i=0; i<int(datalog.Rules.size()); i++){
-
-
-        for(int j=0; j<int(finishedRelations.size()); j++){
-            if(finishedRelations.at(j).GetName() == datalog.Rules.at(i).GetHeadPredicates().GetName()){
-                for(int k=0; k<finishedRelations.at(j).GetHeader().Size(); k++){
-                    for(Tuple t : finishedRelations.at(j).GetTuples()){
-                        if(k == 0){
-                            std::cout << "  " << finishedRelations.at(j).GetHeader().GetAttribute(k) << "=" << t.GetValue(k) << ", ";
-                        }
-                        else if(k < finishedRelations.at(j).GetHeader().Size()-1){
-                            std::cout << finishedRelations.at(j).GetHeader().GetAttribute(k) << "=" << t.GetValue(k) << ", ";
-                        } else{
-                            std::cout << finishedRelations.at(j).GetHeader().GetAttribute(k) << "=" << t.GetValue(k);
-                        }
-                    }
-                }
-                std::cout << std::endl;
-            }
+        if(sum==0){
+            break;
         }
-    } */
+    }while(sum != 0);
+
 
     std::cout << std::endl << "Schemes populated after " << ruleNum << " passes through the Rules." << std::endl << std::endl;
 

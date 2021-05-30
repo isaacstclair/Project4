@@ -18,6 +18,7 @@ Relation::Relation(std::string name, Header header, std::set<Tuple> tuples){
 
 Relation::~Relation(){
     tuples.clear();
+    matchedTuplesPairs.clear();
 }
 
 void Relation::AddTuple(Tuple newTuple){
@@ -109,10 +110,18 @@ Relation Relation::Join(Relation secondRelation){
     matchedTuplesPairs.clear();
 
     std::string newName = "NewRelation";
-
     Header newHeader = CombineHeaders(secondRelation.GetHeader());
     matchedTuplesPairs = tuplesToMatch(secondRelation.GetHeader());
-    if(int(matchedTuplesPairs.size()) > 0 && (!tuples.empty() | secondRelation.tuples.empty())) {
+
+    if(int(matchedTuplesPairs.size()) == 0 && (!tuples.empty() | secondRelation.tuples.empty())){
+        for (Tuple j : tuples) {
+            for(Tuple k : secondRelation.GetTuples()) {
+                if(Joinable(j,k)) {
+                    newTuples.insert(JoinTuples(j, k));
+                }
+            }
+        }
+    } else if(int(matchedTuplesPairs.size()) > 0 && (!tuples.empty() | secondRelation.tuples.empty())) {
         for (int i = 0; i < int(matchedTuplesPairs.size()); i++) {
             for (Tuple j : tuples) {
                 for(Tuple k : secondRelation.GetTuples()) {
@@ -172,6 +181,9 @@ std::vector<std::pair<int,int>> Relation::tuplesToMatch(Header newHeader){
 
 bool Relation::Joinable(Tuple tuple1, Tuple tuple2){
     int sum = 0;
+    if(int(matchedTuplesPairs.size()) == 0){
+        return true;
+    }
     for(int i=0; i<int(matchedTuplesPairs.size()); i++){
         if(tuple1.GetValue(matchedTuplesPairs.at(i).first) == tuple2.GetValue(matchedTuplesPairs.at(i).second)){
                 sum++;
@@ -183,9 +195,20 @@ bool Relation::Joinable(Tuple tuple1, Tuple tuple2){
     return false;
 }
 
-
 Tuple Relation::JoinTuples(Tuple tuple1, Tuple tuple2){
     std::vector<std::string> newTuple;
+
+    if(int(matchedTuplesPairs.size()) == 0){
+        for(int i=0; i<tuple1.GetSize(); i++){
+            newTuple.push_back(tuple1.GetValue(i));
+        }
+        for(int i=0; i<tuple2.GetSize(); i++){
+            newTuple.push_back(tuple2.GetValue(i));
+        }
+        return newTuple;
+    }
+
+
     for(int i=0; i<tuple1.GetSize(); i++){
         newTuple.push_back(tuple1.GetValue(i));
     }
